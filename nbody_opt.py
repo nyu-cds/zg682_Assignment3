@@ -4,21 +4,10 @@
     Lopt=29.50247205100095s
     N=4.197253003132573
 """
-
-
-def nbody(loops, reference, iterations):
-    '''
-        nbody simulation
-        loops - number of loops to run
-        reference - body at center of system
-        iterations - number of timesteps to advance
-    '''
-    # change global variables into local variables
-    PI = 3.14159265358979323
-    SOLAR_MASS = 4 * PI * PI
-    DAYS_PER_YEAR = 365.24
-
-    BODIES = {
+PI = 3.14159265358979323
+SOLAR_MASS = 4 * PI * PI
+DAYS_PER_YEAR = 365.24
+BODIES = {
     'sun': ([0.0, 0.0, 0.0], [0.0, 0.0, 0.0], SOLAR_MASS),
 
     'jupiter': ([4.84143144246472090e+00,
@@ -53,7 +42,16 @@ def nbody(loops, reference, iterations):
                  -9.51592254519715870e-05 * DAYS_PER_YEAR],
                 5.15138902046611451e-05 * SOLAR_MASS)}
     
-    # unpack offset_momentum function
+
+
+def nbody(loops, reference, iterations,BODIES=BODIES):
+    '''
+        nbody simulation
+        loops - number of loops to run
+        reference - body at center of system
+        iterations - number of timesteps to advance
+    '''
+    
     [px, py, pz] = [0.0, 0.0, 0.0]
     for body, content in BODIES.items():
         (r, [vx, vy, vz], m_) = content
@@ -70,17 +68,12 @@ def nbody(loops, reference, iterations):
 
     for i in range(loops * iterations):
 
-        # unpack advance function
         dt=0.01
 
         for (body1, body2) in body_pairs:
             ([x1, y1, z1], v1, m1) = BODIES[body1]
             ([x2, y2, z2], v2, m2) = BODIES[body2]
-
-	     # unpack compute_deltas function
             (dx, dy, dz) = (x1-x2, y1-y2, z1-z2)
-
-	     # unpack update_vs/compute_b(m2, dt, dx, dy, dz) function
             mag = dt * ((dx * dx + dy * dy + dz * dz) ** (-1.5))
             te2 = m2 * mag
             te1 = m1 * mag
@@ -93,8 +86,6 @@ def nbody(loops, reference, iterations):
 
         for body, content in BODIES.items():
             (r, [vx, vy, vz], m) = content
-
-            # unpack update_rs(r, dt, vx, vy, vz) function
             r[0] += dt * vx
             r[1] += dt * vy
             r[2] += dt * vz
@@ -105,11 +96,7 @@ def nbody(loops, reference, iterations):
             for (body1, body2) in body_pairs:
                 ((x1, y1, z1), v1, m1) = BODIES[body1]
                 ((x2, y2, z2), v2, m2) = BODIES[body2]
-
-	         # unpack compute_deltas function
                 (dx, dy, dz) = (x1 - x2, y1 - y2, z1 - z2)
-
-	         # unpack report_energy function
                 report_energy -= (m1 * m2) / ((dx ** 2 + dy ** 2 + dz ** 2) ** 0.5)
 
             for body, content in BODIES.items():
