@@ -62,8 +62,6 @@ def nbody(loops, reference, iterations,BODIES=BODIES):
     v[1] = py / m
     v[2] = pz / m
 
-    # set up body pairs
-    from itertools import combinations
     body_pairs=list(combinations(BODIES.keys(),2))
 
     for i in range(loops * iterations):
@@ -89,7 +87,7 @@ def nbody(loops, reference, iterations,BODIES=BODIES):
             r[0] += dt * vx
             r[1] += dt * vy
             r[2] += dt * vz
-		
+    
         if i != 0 and i % iterations == 0:
             report_energy = 0.0
 
