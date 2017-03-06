@@ -1,9 +1,6 @@
 # -----------------------------------------------------------------------------
 # calculator.py
 '''
-After the modification: Total time: 0.078s
-The running time decreases by 3.36s.
-
 Original code's analysis line by line: 
 Timer unit: 3.77581e-07 s
 
@@ -73,6 +70,26 @@ Line #      Hits         Time  Per Hit   % Time  Line Contents
 
     I think what really matter are the nested loops in add, multiplied and sqrt
     function. We can solve that by calling the functions in Numpy.
+
+    After the modification，
+    
+Total time: 0.0204917 s
+File: <ipython-input-1-ad5fefa7a592>
+Function: hypotenuse at line 28
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+    28                                           def hypotenuse(x,y):
+    29                                               """
+    30                                               Return sqrt(x**2 + y**2) for two arrays, a and b.
+    31                                               x and y must be two-dimensional arrays of the same shape.
+    32                                               """
+    33         1        13295  13295.0     24.5      xx = multiply(x,x)
+    34         1        20165  20165.0     37.2      yy = multiply(y,y)
+    35         1        10199  10199.0     18.8      zz = add(xx, yy)
+    36         1        10612  10612.0     19.6      return sqrt(zz)
+
+The improvement is 167.79 times
 ''' 
 # ----------------------------------------------------------------------------- 
 import numpy as np
