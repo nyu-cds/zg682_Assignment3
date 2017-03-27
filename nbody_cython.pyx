@@ -45,11 +45,11 @@ cdef dict BODIES = {
 from itertools import combinations
 cdef list body_pairs=list(combinations(BODIES.keys(),2))
 
-cdef void advance(float dt, int iterations, dict bodies=BODIES):
+cdef void advance(dt, iterations, bodies=BODIES):
     cdef float mag
     cdef float m2r,m1r,x1,y1,z1,x2,y2,z2,vx,vy,vz
     cdef float dx,dy,dz
-    cdef list v1,m1,v2,m2
+    #cdef list v1,m1,v2,m2
     for i in range(iterations):
         for (body1, body2) in body_pairs:
             ([x1, y1, z1], v1, m1) = bodies[body1]
@@ -74,10 +74,9 @@ cdef void advance(float dt, int iterations, dict bodies=BODIES):
             r[1] += dt * vy
             r[2] += dt * vz
 
-cdef float report_energy(float e=0.0, dict bodies=BODIES, list pairs=body_pairs):
-    cdef float x1, y1, z1,x2, y2, z2,m1,m2,vx, vy, vz,m
+cdef float report_energy(e=0.0, bodies=BODIES, pairs=body_pairs):
+    cdef float x1, y1, z1,x2, y2, z2,m1,m2,vx, vy, vz
     cdef float dx,dy,dz
-    cdef list v1,v2,r
     for (body1, body2) in pairs:
         ([x1, y1, z1], v1, m1) = bodies[body1]
         ([x2, y2, z2], v2, m2) = bodies[body2]
@@ -92,14 +91,17 @@ cdef float report_energy(float e=0.0, dict bodies=BODIES, list pairs=body_pairs)
         
     return e
 
-cdef void nbody(int loops, str reference, int iterations, dict bodies=BODIES):
+cpdef nbody(loops, reference, iterations, bodies=BODIES):
     # unpack offset_momentum function
     cdef float px=0.0,py=0.0,pz=0.0
-    cdef float vx,vy,vz,m
-    cdef list v,r,m_
+    cdef float vx,vy,vz
+    #def list v
     for content in bodies.values():
         (r, [vx, vy, vz], m_) = content
-        [px, py, pz] = list(map(lambda x,y: y-x*m_, [vx,vy,vz],[px,py,pz]))#vectorV-m*vector
+        px -= vx * m_
+        py -= vy * m_
+        pz -= vz * m_
+        #vectorV-m*vector
         
     (r, v, m) = bodies[reference]
     v[0] = px / m
@@ -111,8 +113,10 @@ cdef void nbody(int loops, str reference, int iterations, dict bodies=BODIES):
         advance(0.01,iterations)
         print(report_energy())
 
-
-if __name__=='__main__':
+if __name__ == '__main__':
     import timeit
     print(timeit.timeit(lambda:nbody(100, 'sun', 20000), number=1))
+
+
+
 
