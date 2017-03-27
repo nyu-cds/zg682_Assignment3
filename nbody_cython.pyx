@@ -1,6 +1,6 @@
-"The running time has been reduced to 8.16362965642395s
+'''The running time has been reduced to 8.16362965642395s
 The time has been greatly decreased compared with the original optimized version which is 29.5s 
-"
+'''
 %%cython
 cdef float PI= 3.14159265358979323 
 cdef float SOLAR_MASS = 4 * PI * PI 
