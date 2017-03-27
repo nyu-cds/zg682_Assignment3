@@ -1,4 +1,4 @@
-%%cython
+
 '''The running time has been reduced to 8.16362965642395s
 The time has been greatly decreased compared with the original optimized version which is 29.5s 
 '''
@@ -111,7 +111,8 @@ cdef void nbody(int loops, str reference, int iterations, dict bodies=BODIES):
         advance(0.01,iterations)
         print(report_energy())
 
-if __name__ == '__main__':
+
+if __name__=='__main__':
     import timeit
     print(timeit.timeit(lambda:nbody(100, 'sun', 20000), number=1))
 
