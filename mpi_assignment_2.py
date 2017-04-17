@@ -1,8 +1,10 @@
+import numpy
 from mpi4py import MPI
 comm=MPI.COMM_WORLD
 rank=comm.Get_rank() #setup rank
 size=comm.Get_size() #setup size
 
+datal= numpy.zeros(1)
 
 if rank ==0: #when rank is 0, input the data
     data=101 #initialize the data
@@ -14,15 +16,15 @@ if rank ==0: #when rank is 0, input the data
             print("not an int, try again")
             continue
 
-    comm.send(data, dest=1 )#send the number to rank 1
-    data = comm.recv(source=size-1)#receive the number from the last rank 
-    print(data)
+    datal[0]=data
+    comm.Send(datal, dest=1 )#send the number to rank 1
+    comm.Recv(datal,source=size-1)#receive the number from the last rank 
+    print(datal[0])
 
 elif rank<size-1:                    #if the rank is not the last rank
-    data = comm.recv( source=rank-1 )# receive the data from the previous rank
-    data =data*rank # multiply the data by its rank
-    comm.send(data,(rank+1)) #send the data to the next rank
+    comm.Recv( datal,source=rank-1 )# receive the data from the previous rank
+    datal =datal*(rank+1) # multiply the data by its rank
+    comm.Send(datal,(rank+1)) #send the data to the next rank
 else:                                 #if the rank is the last one
-    data = comm.recv( source=rank-1 )
-    data =data*rank
-    comm.send(data,0)                #send the data to the rank 0
+    comm.Recv( datal,source=rank-1 )
+    comm.Send(datal,dest=0)                #send the data to the rank 0
