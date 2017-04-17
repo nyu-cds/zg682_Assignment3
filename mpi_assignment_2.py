@@ -11,9 +11,10 @@ if rank ==0: #when rank is 0, input the data
     while (data>=100) : #until data is less than 100, we stop the loop
         try:            #check if data is an interger
             data = input('input an integer less than 100: ')
-            data =int(data) 
+            data=int(data) 
         except :
             print("not an int, try again")
+            data=101    #initialize the data gain for the loop
             continue
 
     datal[0]=data
@@ -23,7 +24,7 @@ if rank ==0: #when rank is 0, input the data
 
 elif rank<size-1:                    #if the rank is not the last rank
     comm.Recv( datal,source=rank-1 )# receive the data from the previous rank
-    datal =datal*(rank+1) # multiply the data by its rank
+    datal =datal*(rank+1) # multiply the data by next rank
     comm.Send(datal,(rank+1)) #send the data to the next rank
 else:                                 #if the rank is the last one
     comm.Recv( datal,source=rank-1 )
