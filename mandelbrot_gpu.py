@@ -24,6 +24,7 @@ def compute_mandel(min_x, max_x, min_y, max_y, image, iters):
     Set up the threads and compute.
     every thread is expressed as (ori_x+grdthread_x*i,ori_y+grdthread_y*j)
     where ori_x and ori_y are the start point
+    
     """
     ori_y,ori_x=cuda.grid(2)#original point 
     height = image.shape[0]
