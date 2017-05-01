@@ -2,7 +2,7 @@ from numba import cuda
 import numpy as np
 from pylab import imshow, show
 
-@cuda.jit(device=True)
+@cuda.jit(device=True)#using cuda
 def mandel(x, y, max_iters):
     '''
     Given the real and imaginary parts of a complex number,
@@ -19,7 +19,7 @@ def mandel(x, y, max_iters):
     return max_iters
 
 
-@cuda.jit
+@cuda.jit#using cuda
 def compute_mandel(min_x, max_x, min_y, max_y, image, iters):
     """
     Set up the threads and compute.
