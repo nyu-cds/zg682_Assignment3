@@ -20,26 +20,28 @@ def mandel(x, y, max_iters):
 
 @cuda.jit
 def compute_mandel(min_x, max_x, min_y, max_y, image, iters):
-	'''
-	
-	'''
-    ori_y,ori_x=cuda.grid(2)
+    """
+    Set up the threads to every grid
+    every thread is expressed as (ori_x+grdthread_x*i,ori_y+grdthread_y*j)
+    where ori_x and ori_y are the start point
+    """
+    ori_y,ori_x=cuda.grid(2)#original point 
     height = image.shape[0]
     width = image.shape[1]
     pixel_size_x = (max_x - min_x) / width
     pixel_size_y = (max_y - min_y) / height
 
     grdthread_x,grdthread_y=blockdim[1]*griddim[1],blockdim[0]*griddim[0]
-    range_x=round(width/grdthread_x)+1
-    range_y=round(height/grdthread_y)+1
+    range_x=round(width/grdthread_x)+1 #the number of points on axis x
+    range_y=round(height/grdthread_y)+1#the number of points on axis y
     
     for i in range(range_x):
         x=ori_x+grdthread_x*i
-        real = min_x + x * pixel_size_x
-        for j in range(height):
-            y=ori_y+grdthread*j
+        real = min_x + x * pixel_size_x#real part 
+        for j in range(range_y):
+            y=ori_y+grdthread_y*j
             if ((x<width) & (y<height)):
-                imag = min_y + y * pixel_size_y
+                imag = min_y + y * pixel_size_y#imagine part
                 image[y, x] = mandel(real, imag, iters)
 
 
