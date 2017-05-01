@@ -19,7 +19,6 @@ def mandel(x, y, max_iters):
     return max_iters
 
 @cuda.jit
-
 def compute_mandel(min_x, max_x, min_y, max_y, image, iters):
     """
     Set up the threads and compute.
