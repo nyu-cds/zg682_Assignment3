@@ -15,4 +15,4 @@ if __name__ == '__main__':
         words_mapped = words.map(lambda x: (x,1))#playing map part
 	counts = words_mapped.reduceByKey(lambda x,y:1)#playing reduce part and then count
 	c = counts.count()
-	print("Distinct Words:", c)
+	print(c)
